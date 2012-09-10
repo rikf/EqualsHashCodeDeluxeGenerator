@@ -14,18 +14,19 @@ class EqualsGenerator {
         if (!equalsPsiFields.isEmpty()) {
             PsiElementFactory factory = getFactory(equalsPsiFields[0])
             StringBuilder methodText = new StringBuilder()
-            methodText << '@Override public boolean equals(Object obj) {'
-            methodText << ' if (obj == null) {return false;}'
-            methodText << ' if (getClass() != obj.getClass()) {return false;}'
-            methodText << " final ${psiClass.name} other = (${psiClass.name}) obj;"
-            methodText << ' return '
+            methodText << '@Override public final boolean equals(Object other) {'
+            methodText << 'boolean result = false;'
+            methodText << "if (other instanceof ${psiClass.name}) {"
+            methodText << "final ${psiClass.name} that = (${psiClass.name}) other;"
+            methodText << 'final EqualsBuilder eb = new EqualsBuilder()\n'
             equalsPsiFields.eachWithIndex { field, index ->
-                methodText <<  "Objects.${equalsMethodName}(this.${field.name}, other.${field.name})"
-                if (index < equalsPsiFields.size() - 1) {
-                    methodText << ' && '
-                }
+                methodText << ".append(${field.name}, that.${field.name})\n"
             }
-            methodText << ';}'
+            methodText << ';'
+            methodText << 'result = eb.isEquals() && that.canEqual(this);'
+            methodText << '}'
+            methodText << 'return result;'
+            methodText << '}'
             factory.createMethodFromText(methodText.toString(), null, LanguageLevel.JDK_1_6)
         }
     }

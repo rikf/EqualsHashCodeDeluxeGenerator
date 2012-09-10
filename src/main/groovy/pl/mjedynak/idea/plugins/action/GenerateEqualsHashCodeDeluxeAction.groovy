@@ -6,6 +6,7 @@ import org.picocontainer.defaults.DefaultPicoContainer
 import pl.mjedynak.idea.plugins.factory.GenerateEqualsHashCodeDeluxeWizardFactory
 import pl.mjedynak.idea.plugins.generator.EqualsGenerator
 import pl.mjedynak.idea.plugins.generator.HashCodeGenerator
+import pl.mjedynak.idea.plugins.generator.CanEqualGenerator
 
 class GenerateEqualsHashCodeDeluxeAction extends BaseGenerateAction {
 
@@ -16,6 +17,7 @@ class GenerateEqualsHashCodeDeluxeAction extends BaseGenerateAction {
     static {
         picoContainer.registerComponentImplementation(HashCodeGenerator)
         picoContainer.registerComponentImplementation(EqualsGenerator)
+        picoContainer.registerComponentImplementation(CanEqualGenerator)
         picoContainer.registerComponentImplementation(MethodChooser)
         picoContainer.registerComponentImplementation(GenerateEqualsHashCodeDeluxeWizardFactory)
         picoContainer.registerComponentImplementation(GenerateEqualsHashCodeDeluxeActionHandler)

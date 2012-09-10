@@ -1,12 +1,8 @@
 package pl.mjedynak.idea.plugins.generator
 
 import com.intellij.pom.java.LanguageLevel
-import com.intellij.psi.JavaPsiFacade
-import com.intellij.psi.PsiClass
-import com.intellij.psi.PsiElementFactory
-import com.intellij.psi.PsiField
-import com.intellij.psi.PsiMethod
 import org.jetbrains.annotations.NotNull
+import com.intellij.psi.*
 
 class CanEqualGenerator {
 
@@ -14,14 +10,15 @@ class CanEqualGenerator {
         if (!equalsPsiFields.isEmpty()) {
             PsiElementFactory factory = getFactory(equalsPsiFields[0])
             StringBuilder methodText = new StringBuilder()
-            methodText << '@Override public boolean equals(Object other) {'
-            methodText << 'boolean result = false;'
-            methodText << 'if (other instanceof {psiClass.name}) {'
-            methodText << 'final EqualsBuilder eb = new EqualsBuilder()'
-            equalsPsiFields.eachWithIndex { field, index ->
-                methodText <<  ".append(${field.name}, other.${field.name})"
-            }
-            methodText << ';'
+            methodText << "/**\n" +
+                    "* See: http://www.artima.com/lejava/articles/equality.html\n" +
+                    "* \n" +
+                    "* @param other to compare to.\n" +
+                    "* @return boolean if other is an instance of this.\n" +
+                    "*/\n" +
+                    "public final boolean canEqual(final Object other) {"
+            methodText << "return (other instanceof ${psiClass.name});"
+            methodText << '}'
             factory.createMethodFromText(methodText.toString(), null, LanguageLevel.JDK_1_6)
         }
     }

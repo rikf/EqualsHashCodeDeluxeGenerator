@@ -2,17 +2,17 @@ apply plugin: 'groovy'
 apply plugin: 'codenarc'
 apply plugin: 'idea'
 apply from: 'idea.gradle'
-apply from: 'cobertura.gradle'
+//apply from: 'cobertura.gradle'
 
 // --- properties ---
-ideaInstallationPath = 'C:/Program Files (x86)/JetBrains/IntelliJ IDEA Community Edition 11.0'
+ideaInstallationPath = '/home/rikf/.IntelliJIdea1'
 ideaJdk = 'IDEA IC-111.167'
 sourceCompatibility = 1.6
 // --- properties ---
 
 // --- cobertura ---
-cobertura.dependsOn test
-check.dependsOn cobertura
+//cobertura.dependsOn test
+//check.dependsOn cobertura
 // --- cobertura ---
 
 

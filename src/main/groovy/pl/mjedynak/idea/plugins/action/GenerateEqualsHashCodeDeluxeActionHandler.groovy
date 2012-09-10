@@ -25,6 +25,7 @@ import pl.mjedynak.idea.plugins.factory.GenerateEqualsHashCodeDeluxeWizardFactor
 import pl.mjedynak.idea.plugins.generator.EqualsGenerator
 import pl.mjedynak.idea.plugins.generator.HashCodeGenerator
 import pl.mjedynak.idea.plugins.wizard.GenerateEqualsHashCodeDeluxeWizard
+import pl.mjedynak.idea.plugins.generator.CanEqualGenerator
 
 class GenerateEqualsHashCodeDeluxeActionHandler extends GenerateMembersHandlerBase {
 
@@ -37,6 +38,7 @@ class GenerateEqualsHashCodeDeluxeActionHandler extends GenerateMembersHandlerBa
 
     HashCodeGenerator guavaHashCodeGenerator
     EqualsGenerator guavaEqualsGenerator
+    CanEqualGenerator canEqualGenerator
     MethodChooser methodChooser
     GenerateEqualsHashCodeDeluxeWizardFactory factory
 
@@ -44,11 +46,12 @@ class GenerateEqualsHashCodeDeluxeActionHandler extends GenerateMembersHandlerBa
     PsiField[] hashCodeFields = null
 
 
-    GenerateEqualsHashCodeDeluxeActionHandler(HashCodeGenerator guavaHashCodeGenerator, EqualsGenerator guavaEqualsGenerator,
+    GenerateEqualsHashCodeDeluxeActionHandler(HashCodeGenerator guavaHashCodeGenerator, EqualsGenerator guavaEqualsGenerator, CanEqualGenerator canEqualGenerator,
                                               MethodChooser methodChooser, GenerateEqualsHashCodeDeluxeWizardFactory factory) {
         super('')
         this.guavaHashCodeGenerator = guavaHashCodeGenerator
         this.guavaEqualsGenerator = guavaEqualsGenerator
+        this.canEqualGenerator = canEqualGenerator
         this.methodChooser = methodChooser
         this.factory = factory
     }
@@ -60,8 +63,9 @@ class GenerateEqualsHashCodeDeluxeActionHandler extends GenerateMembersHandlerBa
         String hashCodeMethodName = methodChooser.chooseHashCodeMethodName(psiClass)
         def hashCodeMethod = guavaHashCodeGenerator.hashCodeMethod(hashCodeFields as List, hashCodeMethodName)
         def equalsMethod = guavaEqualsGenerator.equalsMethod(equalsFields as List, psiClass, equalsMethodName)
+        def canEqualsMethod = canEqualGenerator.equalsMethod(equalsFields as List, psiClass, equalsMethodName)
 
-        OverrideImplementUtil.convert2GenerationInfos([hashCodeMethod, equalsMethod])
+        OverrideImplementUtil.convert2GenerationInfos([hashCodeMethod, equalsMethod, canEqualsMethod])
     }
 
     @Override
